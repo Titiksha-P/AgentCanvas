@@ -1,31 +1,52 @@
-const SECURITY_API_URL = "http://localhost:8000/api/v1/security/analyze";
+const EVALUATION_API_URL = window.AGENTCANVAS_API_URL || "http://localhost:8080/api/evaluate";
+const HEALTH_API_URL = window.AGENTCANVAS_HEALTH_URL || "http://localhost:8080/api/health";
 
-async function runSecurityAnalysis(prompt) {
+async function parseJsonResponse(response) {
+  let payload;
   try {
-    const response = await fetch(SECURITY_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Security engine returned ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    return {
-      offline: true,
-      error: error.message,
-      risk: { risk_score: 55, severity: "medium" },
-      policy: { allowed: false, reason: "Live security engine unavailable; using demo fallback." },
-      sensitive_data: { detected: /credit card|password|api key|customer data/i.test(prompt) },
-      compliance: { score: 62 },
-      prompt_injection: { detected: /ignore all|ignore previous|reveal.*prompt|jailbreak/i.test(prompt) },
-      threat_simulation: { result: "Potential manipulation attempt detected." },
-      security_report: "Demo result generated because the local FastAPI service could not be reached."
-    };
+    payload = await response.json();
+  } catch {
+    throw new Error(`Backend returned ${response.status} with a non-JSON response.`);
   }
+
+  if (!response.ok) {
+    const detail = payload?.detail || payload?.message || `Backend returned ${response.status}`;
+    throw new Error(detail);
+  }
+
+  return payload;
 }
 
-window.AgentCanvasAPI = { runSecurityAnalysis, SECURITY_API_URL };
+async function evaluateAgent({ agent, scenarioName, userPrompt }) {
+  const response = await fetch(EVALUATION_API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      agent: {
+        name: agent.name,
+        purpose: agent.purpose,
+        system_prompt: agent.systemPrompt,
+        tools: agent.tools,
+        permissions: agent.permissions,
+        business_rules: agent.businessRules,
+        memory_settings: agent.memorySettings
+      },
+      scenario_name: scenarioName,
+      user_prompt: userPrompt
+    })
+  });
+
+  return parseJsonResponse(response);
+}
+
+async function checkBackendHealth() {
+  const response = await fetch(HEALTH_API_URL);
+  return parseJsonResponse(response);
+}
+
+window.AgentCanvasAPI = {
+  EVALUATION_API_URL,
+  HEALTH_API_URL,
+  evaluateAgent,
+  checkBackendHealth
+};
