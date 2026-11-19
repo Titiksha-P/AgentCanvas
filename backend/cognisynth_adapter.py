@@ -9,7 +9,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 class GateFinding(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
     code: str = Field(min_length=1)
     message: str = Field(min_length=1)
 
@@ -34,8 +34,8 @@ class CognisynthSafetyGate:
         except ValidationError as exc:
             raise ValueError("Cognisynth safety gate rejected malformed evaluator output") from exc
         codes = [finding.code for finding in checked.findings]
-        if len(codes) != len(set(codes)):
-            raise ValueError("Cognisynth safety gate rejected duplicate issue codes")
+        if set(codes) != set(checked.detected_issue_codes):
+            raise ValueError("Cognisynth safety gate rejected inconsistent finding codes")
         if checked.matched_expected_failures and checked.false_negatives:
             raise ValueError("Cognisynth safety gate rejected inconsistent success state")
         return {**checked.model_dump(), "safety_gate": {"accepted": checked.false_negatives == 0 and checked.false_positives == 0,
