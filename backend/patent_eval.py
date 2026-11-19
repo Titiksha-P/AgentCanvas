@@ -10,7 +10,25 @@ import re
 from pathlib import Path
 from typing import Any
 
+from pydantic import BaseModel, ConfigDict, Field
+
 DATA_PATH = Path(__file__).with_name("patent_cases.json")
+
+
+class PatentEvaluationCase(BaseModel):
+    """Strict schema gate; unknown fixture fields are rejected."""
+    model_config = ConfigDict(extra="forbid")
+    id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    category: str = Field(min_length=1)
+    source_claim: str = Field(min_length=1)
+    candidate_output: str = Field(min_length=1)
+    required_phrases: list[str] = Field(default_factory=list)
+    unsupported_features: list[str] = Field(default_factory=list)
+    evidence_ids: list[str] = Field(default_factory=list)
+    invalid_dependency_references: list[int] = Field(default_factory=list)
+    missing_antecedents: list[str] = Field(default_factory=list)
+    expected_issue_codes: list[str] = Field(default_factory=list)
 CITATION_RE = re.compile(r"\b(?:US|EP|WO)-?\d{4,}(?:-[A-Z]\d?)?\b", re.I)
 
 
@@ -23,7 +41,8 @@ def _tokens(text: str) -> set[str]:
 
 
 def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
-    """Run deterministic checks and return explicit, inspectable findings."""
+    """Validate untrusted input, then run deterministic checks and return findings."""
+    case = PatentEvaluationCase.model_validate(case).model_dump()
     source = _normalise(case["source_claim"])
     candidate = _normalise(case["candidate_output"])
     evidence_ids = {str(item).upper() for item in case.get("evidence_ids", [])}
@@ -100,7 +119,8 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
 def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     if cases is None:
         cases = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-    results = [evaluate_case(case) for case in cases]
+    validated_cases = [PatentEvaluationCase.model_validate(case).model_dump() for case in cases]
+    results = [evaluate_case(case) for case in validated_cases]
     expected_total = sum(len(item["expected_issue_codes"]) for item in results)
     tp = sum(item["true_positives"] for item in results)
     fp = sum(item["false_positives"] for item in results)
