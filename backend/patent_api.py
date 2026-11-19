@@ -2,6 +2,7 @@
 from __future__ import annotations
 import json
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
@@ -42,7 +43,13 @@ def patent_evaluate() -> dict[str, Any]:
 def patent_evaluate_batch(request: BatchRequest) -> dict[str, Any]:
     try:
         cases = [item.model_dump() for item in request.cases]
-        results = [evaluate_hybrid(case, use_llm=request.include_llm) for case in cases]
+        # Bounded in-process concurrency; requests are capped at 100 cases.
+        with ThreadPoolExecutor(max_workers=min(8, len(cases))) as pool:
+            results = list(pool.map(lambda case: evaluate_hybrid(case, use_llm=request.include_llm), cases))
+        for source, result in zip(cases, results):
+            result.update({"title": source["title"], "category": source["category"],
+                           "source_claim": source["source_claim"], "candidate_output": source["candidate_output"],
+                           "findings": result["combined_findings"]})
         summary = {"case_count": len(results), "llm_enabled": request.include_llm,
                    "finding_count": sum(len(item["combined_findings"]) for item in results)}
         record_id = save_evaluation("batch_hybrid", summary, {"results": results})
