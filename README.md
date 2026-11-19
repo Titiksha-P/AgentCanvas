@@ -235,3 +235,57 @@ The implementation follows Cognisynth's principle that model-generated output is
 ### Tests
 
 From the repository root, run `python -m pip install -r backend/requirements.txt` and then `python -m unittest discover -s backend/tests -v`. The expected fixture result is 5/5 expected failures detected, with zero fixture false positives and false negatives. This is a test-set result, not a real-world accuracy estimate.
+## Patent evaluation research workbench v0.2
+
+The patent evaluation module now includes **15 synthetic, hand-authored regression cases**. Each case carries an issue-code oracle, severity, annotation status, and rationale. These are test annotations, not expert legal annotations.
+
+### Components
+- `backend/patent_eval.py`: strict Pydantic case schema and deterministic patent-text checks.
+- `backend/cognisynth_adapter.py`: Cognisynth-inspired fail-closed output gate. It adapts the invariant-gate pattern to patent evaluation; it does not reuse Cognisynth's UI blueprint validator as patent logic.
+- `backend/patent_research.py`: lexical semantic proxy, optional OpenAI LLM judge, hybrid evaluator, micro precision/recall/F1 and experiment JSONL logging.
+- `backend/patent_store.py`: SQLAlchemy persistence. SQLite is the local default; PostgreSQL is supported through `DATABASE_URL`.
+- `backend/patent_api.py`: single-run, bounded batch (up to 100 cases, at most 8 in-process workers), experiment and history endpoints.
+- `frontend/`: React + TypeScript evaluation console with benchmark, baseline comparison, JSON batch submission and history.
+- `research/patent-dataset/README.md`: corpus scope and annotation protocol.
+- `research/patent-evaluation/TECHNICAL_REPORT.md`: methodology, baseline design, metrics, limitations and reproduction.
+
+### Patent API endpoints
+
+```http
+GET  /api/patent-evaluate
+POST /api/patent-evaluate/batch
+POST /api/patent-experiments
+GET  /api/patent-history?limit=25
+```
+
+The batch request body is an object containing `cases` (an array of up to 100 case objects matching `backend/patent_cases.json`) and optional `include_llm`. The LLM judge is off by default and requires a server-side `OPENAI_API_KEY`. LLM output is advisory and never overrides deterministic rule findings.
+
+### Run the React console
+
+In one terminal, start the API as described above. In another:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Set `VITE_API_URL` at build time if the API is not at `http://localhost:8080`.
+
+### Persistent history
+
+SQLite is used by default and writes `agentcanvas_patent.db` in the backend process working directory. For PostgreSQL, install dependencies and set a connection string, for example:
+
+```bash
+DATABASE_URL=postgresql+psycopg://USER:PASSWORD@HOST:5432/agentcanvas
+```
+
+The schema is initialized with SQLAlchemy `create_all`; a production deployment still needs managed database provisioning, migrations, backups, access control and retention policy.
+
+### Cognisynth integration boundary
+
+Cognisynth's `safety/formal_validator.py` validates cognitive UI blueprints, including navigation reachability, critical controls and rendering constraints. Those invariants do not describe patent claim quality. AgentCanvas therefore uses a domain-specific adapter that mirrors the core safety pattern: strict input contracts, explicit invariants, validation of untrusted evaluator output, and fail-closed rejection of malformed results. No claim is made that the existing UI validator itself performs patent review.
+
+### Reproducibility and honest limits
+
+Run `python -m unittest discover -s backend/tests -v` and `python -m compileall -q backend`. GitHub Actions also builds the React/TypeScript frontend. The semantic baseline is a lexical/polarity heuristic, not a true semantic model. The optional LLM baseline needs credentials and was not exercised by offline CI. No expert-annotated corpus, inter-annotator agreement, prior-art retrieval, distributed job queue, production PostgreSQL instance, authentication, or legal validation is included. Synthetic fixture metrics must not be presented as real-world accuracy or patent-law conclusions.
