@@ -55,6 +55,23 @@ class PatentBenchmarkTests(unittest.TestCase):
         self.assertTrue(result["safety_gate"]["accepted"])
         self.assertEqual(result["safety_gate"]["gate"], "cognisynth_invariant_adapter")
 
+    def test_antecedent_basis_requires_introduction_before_first_definite_use(self):
+        base = {"id": "ordering", "title": "Ordering", "category": "antecedent",
+            "source_claim": "A device comprises an actuator.",
+            "candidate_output": "The actuator is configured to move. An actuator is coupled to a frame.",
+            "missing_antecedents": ["actuator"],
+            "expected_issue_codes": ["ANTECEDENT_BASIS_MISSING"]}
+        result = evaluate_case(base)
+        self.assertIn("ANTECEDENT_BASIS_MISSING", result["detected_issue_codes"])
+
+    def test_antecedent_basis_accepts_prior_introduction(self):
+        base = {"id": "ordered", "title": "Ordered", "category": "antecedent",
+            "source_claim": "A device comprises an actuator.",
+            "candidate_output": "An actuator is coupled to a frame. The actuator moves the frame.",
+            "missing_antecedents": ["actuator"], "expected_issue_codes": []}
+        result = evaluate_case(base)
+        self.assertNotIn("ANTECEDENT_BASIS_MISSING", result["detected_issue_codes"])
+
     def test_experiment_report_contains_comparable_baselines(self):
         cases = json.loads((BACKEND / "patent_cases.json").read_text(encoding="utf-8"))
         report = run_experiment(cases[:3], include_llm=False)
