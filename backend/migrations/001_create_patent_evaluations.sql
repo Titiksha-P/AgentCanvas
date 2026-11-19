@@ -10,3 +10,6 @@ CREATE INDEX IF NOT EXISTS ix_patent_evaluations_evaluation_type
     ON public.patent_evaluations (evaluation_type);
 CREATE INDEX IF NOT EXISTS ix_patent_evaluations_created_at
     ON public.patent_evaluations (created_at DESC);
+ALTER TABLE public.patent_evaluations ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.patent_evaluations FROM anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.patent_evaluations TO service_role;
