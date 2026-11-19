@@ -1,0 +1,87 @@
+[
+  {
+    "id": "PAT-001",
+    "title": "Omitted sensor limitation",
+    "category": "Claim fidelity",
+    "source_claim": "A monitoring apparatus comprising a temperature sensor, wherein the temperature sensor is configured to measure a surface temperature and transmit a measurement signal to a controller.",
+    "candidate_output": "A monitoring apparatus comprising a temperature sensor that transmits a measurement signal to a controller.",
+    "required_phrases": [
+      "wherein the temperature sensor is configured to measure a surface temperature"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ]
+  },
+  {
+    "id": "PAT-002",
+    "title": "Unsupported technical feature",
+    "category": "Unsupported assertions",
+    "source_claim": "A dispensing device comprising a reservoir and a valve coupled to an outlet, the valve controlling fluid flow from the reservoir.",
+    "candidate_output": "A dispensing device comprising a reservoir, a valve coupled to an outlet, and a wireless charging module that powers the valve.",
+    "required_phrases": [],
+    "unsupported_features": [
+      "wireless charging module"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ]
+  },
+  {
+    "id": "PAT-003",
+    "title": "Unverified patent citation",
+    "category": "Citation verification",
+    "source_claim": "A sensor assembly comprising an optical emitter and a photodetector arranged to detect reflected light.",
+    "candidate_output": "The sensor assembly uses an optical emitter and photodetector. This arrangement is disclosed in US-9999999-A.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "US-2024012345-A1"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ]
+  },
+  {
+    "id": "PAT-004",
+    "title": "Invalid dependent-claim reference",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a base apparatus. Claim 2 depends from claim 1 and adds a removable cover.",
+    "candidate_output": "Claim 4. The apparatus of claim 7, further comprising a removable cover.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      7
+    ],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ]
+  },
+  {
+    "id": "PAT-005",
+    "title": "Missing antecedent basis",
+    "category": "Claim clarity",
+    "source_claim": "An actuator assembly comprising an actuator and a controller configured to operate the actuator.",
+    "candidate_output": "An actuator assembly comprising a controller configured to operate the actuator.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "actuator"
+    ],
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ]
+  }
+]\n
