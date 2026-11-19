@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -36,6 +36,21 @@ class PatentApiTests(unittest.TestCase):
                     allowed = client.post("/api/patent-evaluate", headers={"Authorization": "Bearer test-secret"})
                 self.assertEqual(allowed.status_code, 200)
                 self.assertEqual(allowed.json()["history_id"], 123)
+
+    def test_database_health_checks_live_schema_without_returning_secrets(self):
+        connection = MagicMock()
+        table_result = MagicMock()
+        table_result.scalar.return_value = "public.patent_evaluations"
+        connection.execute.side_effect = [None, table_result]
+        fake_engine = MagicMock()
+        fake_engine.connect.return_value.__enter__.return_value = connection
+        with patch.dict(os.environ, {"APP_ENV": "production", "DATABASE_URL": "postgresql://redacted"}):
+            with patch.object(patent_api, "engine", fake_engine):
+                with TestClient(app) as client:
+                    response = client.get("/api/patent-db-health")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ok")
+        self.assertNotIn("redacted", response.text)
 
     def test_benchmark_batch_experiment_and_history_endpoints(self):
         with tempfile.TemporaryDirectory() as tmp:
