@@ -5,10 +5,15 @@ import os
 from datetime import datetime, timezone
 from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+from sqlalchemy.pool import NullPool
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./agentcanvas_patent.db")
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, pool_pre_ping=True, connect_args=connect_args)
+engine_options = {"pool_pre_ping": True, "connect_args": connect_args}
+if os.getenv("APP_ENV", "").lower() == "production" and not DATABASE_URL.startswith("sqlite"):
+    # Serverless instances should not retain idle SQLAlchemy connection pools.
+    engine_options["poolclass"] = NullPool
+engine = create_engine(DATABASE_URL, **engine_options)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 class Base(DeclarativeBase):
