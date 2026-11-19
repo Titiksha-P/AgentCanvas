@@ -12,6 +12,11 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
+try:
+    from .cognisynth_adapter import CognisynthSafetyGate
+except ImportError:  # direct module import from backend/
+    from cognisynth_adapter import CognisynthSafetyGate
+
 DATA_PATH = Path(__file__).with_name("patent_cases.json")
 
 
@@ -97,7 +102,7 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
     precision_denominator = true_positive + false_positive
     precision = round(true_positive / precision_denominator, 4) if precision_denominator else 1.0
 
-    return {
+    result = {
         "id": case["id"],
         "title": case["title"],
         "category": case["category"],
@@ -114,6 +119,7 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
         "score": round(100 * recall),
         "matched_expected_failures": expected <= detected,
     }
+    return CognisynthSafetyGate().validate(result)
 
 
 def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
