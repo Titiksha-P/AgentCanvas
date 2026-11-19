@@ -30,10 +30,15 @@ function renderCase(item) {
 async function runBenchmark() {
   runButton.disabled = true;
   runButton.textContent = "Running…";
-  statusNode.textContent = "Evaluating five synthetic cases";
+  statusNode.textContent = "Evaluating the synthetic regression corpus";
   errorNode.classList.add("hidden");
   try {
-    const response = await fetch(window.AGENTCANVAS_PATENT_API_URL || "http://localhost:8080/api/patent-evaluate");
+    const configuredApi = window.AGENTCANVAS_PATENT_API_URL || window.AGENTCANVAS_API_URL;
+    const localApi = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+      ? "http://localhost:8080"
+      : "";
+    const apiBase = (configuredApi || localApi).replace(/\/+$/, "");
+    const response = await fetch(`${apiBase}/api/patent-evaluate`);
     const report = await response.json();
     if (!response.ok) throw new Error(report.detail || `Backend returned ${response.status}`);
     document.getElementById("metric-detection").textContent = `${report.detection_rate_percent}%`;
