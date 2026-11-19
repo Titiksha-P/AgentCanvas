@@ -32,7 +32,7 @@ jurisdiction, technology domain, source provenance, adjudication status, and rev
 disagreement. Do not use generated labels as ground truth without expert review.
 
 ## Split and privacy
-The 15 cases are a regression suite only. There are no train/dev/test splits. A future
+The 20 cases are a regression suite only. There are no train/dev/test splits. A future
 corpus must be split by patent family or source document to avoid leakage. Use only
 permissioned, de-identified material; do not transmit confidential or privileged
 documents to an external model without authorization.
