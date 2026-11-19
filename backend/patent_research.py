@@ -13,7 +13,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from patent_eval import evaluate_case
+try:
+    from .patent_eval import evaluate_case
+except ImportError:  # direct module import from backend/
+    from patent_eval import evaluate_case
 
 EXPERIMENT_LOG = Path(os.getenv("PATENT_EXPERIMENT_LOG", "patent_experiments.jsonl"))
 
