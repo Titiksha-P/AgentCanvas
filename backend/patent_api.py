@@ -2,21 +2,23 @@
 from __future__ import annotations
 import json
 import os
+import os
 import hmac
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import text
 
 try:
     from .patent_eval import run_benchmark, evaluate_case, PatentEvaluationCase
     from .patent_research import run_experiment, evaluate_hybrid
-    from .patent_store import save_evaluation, list_evaluations
+    from .patent_store import DATABASE_URL, engine, save_evaluation, list_evaluations
 except ImportError:  # uvicorn app:app when launched inside backend/
     from patent_eval import run_benchmark, evaluate_case, PatentEvaluationCase
     from patent_research import run_experiment, evaluate_hybrid
-    from patent_store import save_evaluation, list_evaluations
+    from patent_store import DATABASE_URL, engine, save_evaluation, list_evaluations
 
 router = APIRouter()
 
@@ -39,6 +41,27 @@ class BatchRequest(BaseModel):
 class ExperimentRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     include_llm: bool = False
+
+
+@router.get("/api/patent-db-health")
+def patent_db_health() -> dict[str, Any]:
+    """Non-sensitive readiness check for the configured production database."""
+    if not os.getenv("DATABASE_URL"):
+        return {"status": "not_configured", "message": "Set DATABASE_URL in the backend deployment environment."}
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+            table_exists = connection.execute(
+                text("SELECT to_regclass('public.patent_evaluations')")
+            ).scalar() is not None
+        if not table_exists:
+            return {"status": "schema_missing", "message": "Apply the patent_evaluations migration."}
+        return {"status": "ok", "table": "public.patent_evaluations"}
+    except Exception:
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection failed. Check DATABASE_URL, password, SSL, and pooler settings.",
+        )
 
 @router.get("/api/patent-evaluate")
 def patent_evaluate() -> dict[str, Any]:
