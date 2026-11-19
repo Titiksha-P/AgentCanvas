@@ -237,7 +237,7 @@ The implementation follows Cognisynth's principle that model-generated output is
 From the repository root, run `python -m pip install -r backend/requirements.txt` and then `python -m unittest discover -s backend/tests -v`. The expected fixture result is 5/5 expected failures detected, with zero fixture false positives and false negatives. This is a test-set result, not a real-world accuracy estimate.
 ## Patent evaluation research workbench v0.2
 
-The patent evaluation module now includes **15 synthetic, hand-authored regression cases**. Each case carries an issue-code oracle, severity, annotation status, and rationale. These are test annotations, not expert legal annotations.
+The patent evaluation module now includes **20 synthetic, hand-authored regression cases**. Each case carries an issue-code oracle, severity, annotation status, and rationale. These are test annotations, not expert legal annotations.
 
 ### Components
 - `backend/patent_eval.py`: strict Pydantic case schema and deterministic patent-text checks.
