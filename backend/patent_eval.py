@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -34,6 +34,10 @@ class PatentEvaluationCase(BaseModel):
     invalid_dependency_references: list[int] = Field(default_factory=list)
     missing_antecedents: list[str] = Field(default_factory=list)
     expected_issue_codes: list[str] = Field(default_factory=list)
+    severity: Literal["low", "medium", "high", "critical"] = "medium"
+    annotation_status: Literal["synthetic_test_oracle"] = "synthetic_test_oracle"
+    annotation_rationale: str = ""
+    evidence_spans: list[dict[str, str]] = Field(default_factory=list)
 CITATION_RE = re.compile(r"\b(?:US|EP|WO)-?\d{4,}(?:-[A-Z]\d?)?\b", re.I)
 
 
