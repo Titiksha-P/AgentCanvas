@@ -6,7 +6,7 @@ export default function App(){
  const [report,setReport]=useState<any>(null),[history,setHistory]=useState<History[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(""),[mode,setMode]=useState("rules"),[batchJson,setBatchJson]=useState("");
  async function call(path:string,body?:unknown){const res=await fetch(API+path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});const data=await res.json();if(!res.ok)throw new Error(data.detail||res.statusText);return data;}
  async function refresh(){try{const h=await call("/api/patent-history?limit=20");setHistory(h.items||[]);}catch(e){setError(String(e));}}
- async function run(kind:string){setBusy(true);setError("");setMode(kind);try{const data=kind==="experiment"?await call("/api/patent-experiments",{include_llm:false}):await call("/api/patent-evaluate");setReport(data);await refresh();}catch(e){setError(String(e));}finally{setBusy(false);}}
+ async function run(kind:string){setBusy(true);setError("");setMode(kind);try{const data=kind==="experiment"?await call("/api/patent-experiments",{include_llm:false}):await call("/api/patent-evaluate",{});setReport(data);await refresh();}catch(e){setError(String(e));}finally{setBusy(false);}}
  async function runBatch(){setBusy(true);setError("");setMode("batch");try{const cases=JSON.parse(batchJson);if(!Array.isArray(cases))throw new Error("Batch JSON must be an array of case objects.");const data=await call("/api/patent-evaluate/batch",{cases,include_llm:false});setReport(data);await refresh();}catch(e){setError(String(e));}finally{setBusy(false);}}
  useEffect(()=>{refresh()},[]);
  const metrics=report?.baselines?.deterministic_rules||report||{};
