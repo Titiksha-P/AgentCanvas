@@ -13,7 +13,9 @@ class PatentBenchmarkTests(unittest.TestCase):
     def test_all_twenty_synthetic_cases_are_evaluated(self):
         report = run_benchmark()
         self.assertEqual(report["case_count"], 20)
-        self.assertEqual(report["cases_with_all_expected_failures_detected"], 15)
+        self.assertEqual(report["cases_with_all_expected_failures_detected"], 20)
+        self.assertGreater(report["true_negatives"], 0)
+        self.assertEqual(report["false_positive_rate"], 0.0)
         self.assertEqual(report["false_negatives"], 0)
         self.assertEqual(report["false_positives"], 0)
         self.assertEqual(report["detection_rate_percent"], 100.0)
