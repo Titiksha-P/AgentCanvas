@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -16,6 +17,21 @@ from app import app
 
 
 class PatentApiTests(unittest.TestCase):
+    def test_production_write_endpoints_fail_closed_without_token(self):
+        with patch.dict(os.environ, {"APP_ENV": "production"}, clear=False):
+            os.environ.pop("AGENTCANVAS_API_TOKEN", None)
+            with TestClient(app) as client:
+                response = client.post("/api/patent-evaluate")
+                self.assertEqual(response.status_code, 503)
+
+    def test_production_write_endpoints_require_bearer_token(self):
+        with patch.dict(os.environ, {"APP_ENV": "production", "AGENTCANVAS_API_TOKEN": "test-secret"}, clear=False):
+            with TestClient(app) as client:
+                denied = client.post("/api/patent-evaluate")
+                self.assertEqual(denied.status_code, 401)
+                allowed = client.post("/api/patent-evaluate", headers={"Authorization": "Bearer test-secret"})
+                self.assertEqual(allowed.status_code, 200)
+
     def test_benchmark_batch_experiment_and_history_endpoints(self):
         with tempfile.TemporaryDirectory() as tmp:
             engine = create_engine(f"sqlite:///{tmp}/test.db", connect_args={"check_same_thread": False})
