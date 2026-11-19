@@ -6,6 +6,7 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 from patent_eval import PatentEvaluationCase, evaluate_case, run_benchmark
+from cognisynth_adapter import CognisynthSafetyGate
 from patent_research import classification_metrics, semantic_heuristic, run_experiment
 
 
@@ -43,6 +44,12 @@ class PatentBenchmarkTests(unittest.TestCase):
             "candidate_output": "A device with a battery.", "evidence_quotes": ["exact support"]})
         self.assertEqual(result["mode"], "semantic_heuristic")
         self.assertTrue(result["findings"])
+
+    def test_cognisynth_gate_marks_clean_fixture_as_accepted(self):
+        case = json.loads((BACKEND / "patent_cases.json").read_text(encoding="utf-8"))[0]
+        result = evaluate_case(case)
+        self.assertTrue(result["safety_gate"]["accepted"])
+        self.assertEqual(result["safety_gate"]["gate"], "cognisynth_invariant_adapter")
 
     def test_experiment_report_contains_comparable_baselines(self):
         cases = json.loads((BACKEND / "patent_cases.json").read_text(encoding="utf-8"))
