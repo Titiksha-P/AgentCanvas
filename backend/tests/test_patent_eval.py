@@ -10,9 +10,9 @@ from patent_research import classification_metrics, semantic_heuristic, run_expe
 
 
 class PatentBenchmarkTests(unittest.TestCase):
-    def test_all_fifteen_synthetic_failures_are_detected(self):
+    def test_all_twenty_synthetic_cases_are_evaluated(self):
         report = run_benchmark()
-        self.assertEqual(report["case_count"], 15)
+        self.assertEqual(report["case_count"], 20)
         self.assertEqual(report["cases_with_all_expected_failures_detected"], 15)
         self.assertEqual(report["false_negatives"], 0)
         self.assertEqual(report["false_positives"], 0)
@@ -21,7 +21,10 @@ class PatentBenchmarkTests(unittest.TestCase):
     def test_each_case_reports_findings_and_metrics(self):
         report = run_benchmark()
         for case in report["results"]:
-            self.assertTrue(case["findings"])
+            if case["expected_issue_codes"]:
+                self.assertTrue(case["findings"])
+            else:
+                self.assertEqual(case["findings"], [])
             self.assertIn("precision", case)
             self.assertIn("recall", case)
             self.assertIn("score", case)
