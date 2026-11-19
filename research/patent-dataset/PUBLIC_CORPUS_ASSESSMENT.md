@@ -64,7 +64,7 @@ Example workflow:
 
 ```bash
 python backend/import_uspto_claims.py --input /path/to/patent_claims_fulltext.csv --show-header
-python backend/import_uspto_claims.py --input /path/to/patent_claims_fulltext.csv --id-column <patent_id_column> --text-column <claim_text_column> --claim-number-column <claim_sequence_column> --limit 10000
+python backend/import_uspto_claims.py --input /path/to/patent_claims_fulltext.csv --id-column "REPLACE_WITH_PATENT_ID_COLUMN" --text-column "REPLACE_WITH_CLAIM_TEXT_COLUMN" --claim-number-column "REPLACE_WITH_CLAIM_NUMBER_COLUMN" --limit 10000
 ```
 
 The second command is illustrative: replace the column placeholders with names verified from the actual CSV header. The importer emits `unlabelled_public_source` records with provenance. They are not scored by the defect benchmark until paired candidate outputs and qualified annotations are added.
