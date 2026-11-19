@@ -14,7 +14,11 @@
     "missing_antecedents": [],
     "expected_issue_codes": [
       "CLAIM_LIMITATION_OMITTED"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "id": "PAT-002",
@@ -31,7 +35,11 @@
     "missing_antecedents": [],
     "expected_issue_codes": [
       "UNSUPPORTED_TECHNICAL_ASSERTION"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "id": "PAT-003",
@@ -48,7 +56,11 @@
     "missing_antecedents": [],
     "expected_issue_codes": [
       "UNVERIFIED_PATENT_CITATION"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "id": "PAT-004",
@@ -65,7 +77,11 @@
     "missing_antecedents": [],
     "expected_issue_codes": [
       "INVALID_CLAIM_DEPENDENCY"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "id": "PAT-005",
@@ -82,7 +98,11 @@
     ],
     "expected_issue_codes": [
       "ANTECEDENT_BASIS_MISSING"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [
@@ -99,7 +119,11 @@
     "candidate_output": "A battery comprising an electrolyte.",
     "expected_issue_codes": [
       "CLAIM_LIMITATION_OMITTED"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -116,7 +140,11 @@
     "candidate_output": "A housing formed from a polymer and supporting a circuit board, with a titanium reinforcement layer.",
     "expected_issue_codes": [
       "UNSUPPORTED_TECHNICAL_ASSERTION"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -131,7 +159,11 @@
     "candidate_output": "The method is described in EP-7654321-A1.",
     "expected_issue_codes": [
       "UNVERIFIED_PATENT_CITATION"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -148,7 +180,11 @@
     "candidate_output": "Claim 3. The valve of claim 9, wherein the valve is spring-loaded.",
     "expected_issue_codes": [
       "INVALID_CLAIM_DEPENDENCY"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -165,7 +201,11 @@
     "candidate_output": "A computing device configured to send data to the processor.",
     "expected_issue_codes": [
       "ANTECEDENT_BASIS_MISSING"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [
@@ -182,7 +222,11 @@
     "candidate_output": "A sensor comprising an optical emitter and a photodetector.",
     "expected_issue_codes": [
       "CLAIM_LIMITATION_OMITTED"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -199,7 +243,11 @@
     "candidate_output": "A controller coupled to a motor and configured for satellite communication.",
     "expected_issue_codes": [
       "UNSUPPORTED_TECHNICAL_ASSERTION"
-    ]
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -216,7 +264,11 @@
     "candidate_output": "The pump architecture appears in WO-2020123456-A1.",
     "expected_issue_codes": [
       "UNVERIFIED_PATENT_CITATION"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -233,7 +285,11 @@
     "candidate_output": "Claim 2. The sensor of claim 5, further comprising a housing.",
     "expected_issue_codes": [
       "INVALID_CLAIM_DEPENDENCY"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   },
   {
     "required_phrases": [],
@@ -250,6 +306,10 @@
     "candidate_output": "A fluid system comprising a pump configured to move fluid through the conduit.",
     "expected_issue_codes": [
       "ANTECEDENT_BASIS_MISSING"
-    ]
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": []
   }
 ]
