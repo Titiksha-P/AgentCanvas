@@ -114,7 +114,7 @@ def patent_experiments(request: ExperimentRequest) -> dict[str, Any]:
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Experiment failed: {exc}") from exc
 
-@router.get("/api/patent-history")
+@router.get("/api/patent-history", dependencies=[Depends(require_write_access)])
 def patent_history(limit: int = 25) -> dict[str, Any]:
     if not 1 <= limit <= 100:
         raise HTTPException(status_code=422, detail="limit must be between 1 and 100")
