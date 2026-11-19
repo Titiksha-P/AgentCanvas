@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
+from patent_eval import run_benchmark
+
 app = FastAPI(title="AgentCanvas AI Gateway", version="2.0.0")
 app.add_middleware(
     CORSMiddleware,
@@ -217,7 +219,17 @@ def health() -> dict[str, Any]:
         "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
         "security_api_url": SECURITY_API_URL,
         "model": OPENAI_MODEL,
+        "patent_benchmark_available": True,
     }
+
+
+@app.get("/api/patent-evaluate")
+def patent_evaluate() -> dict[str, Any]:
+    """Run the offline synthetic patent-output benchmark; no API key is required."""
+    try:
+        return run_benchmark()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
 
 
 @app.post("/api/evaluate", response_model=EvaluationResponse)
