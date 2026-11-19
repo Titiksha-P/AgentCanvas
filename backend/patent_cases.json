@@ -83,5 +83,173 @@
     "expected_issue_codes": [
       "ANTECEDENT_BASIS_MISSING"
     ]
+  },
+  {
+    "required_phrases": [
+      "concentration from 2 to 5 percent by weight"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-006",
+    "title": "Omitted numeric range",
+    "category": "Claim fidelity",
+    "source_claim": "A battery comprising an electrolyte having a concentration from 2 to 5 percent by weight.",
+    "candidate_output": "A battery comprising an electrolyte.",
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [
+      "titanium reinforcement layer"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-007",
+    "title": "Unsupported material addition",
+    "category": "Unsupported assertions",
+    "source_claim": "A housing formed from a polymer and supporting a circuit board.",
+    "candidate_output": "A housing formed from a polymer and supporting a circuit board, with a titanium reinforcement layer.",
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-008",
+    "title": "Second unverified citation",
+    "category": "Citation verification",
+    "source_claim": "A method of calibrating a pressure sensor.",
+    "candidate_output": "The method is described in EP-7654321-A1.",
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      9
+    ],
+    "missing_antecedents": [],
+    "id": "PAT-009",
+    "title": "Dependent claim references missing claim",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a valve.",
+    "candidate_output": "Claim 3. The valve of claim 9, wherein the valve is spring-loaded.",
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "processor"
+    ],
+    "id": "PAT-010",
+    "title": "Missing antecedent for processor",
+    "category": "Claim clarity",
+    "source_claim": "A computing device comprising a processor.",
+    "candidate_output": "A computing device configured to send data to the processor.",
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ]
+  },
+  {
+    "required_phrases": [
+      "a filter configured to reject ambient light"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-011",
+    "title": "Two omitted limitations",
+    "category": "Claim fidelity",
+    "source_claim": "A sensor comprising an optical emitter, a photodetector, and a filter configured to reject ambient light.",
+    "candidate_output": "A sensor comprising an optical emitter and a photodetector.",
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [
+      "satellite communication"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-012",
+    "title": "Unsupported network capability",
+    "category": "Unsupported assertions",
+    "source_claim": "A controller coupled to a motor.",
+    "candidate_output": "A controller coupled to a motor and configured for satellite communication.",
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "WO-2020987654-A1"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-013",
+    "title": "Evidence identifier mismatch",
+    "category": "Citation verification",
+    "source_claim": "A fluid pump with an impeller.",
+    "candidate_output": "The pump architecture appears in WO-2020123456-A1.",
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      5
+    ],
+    "missing_antecedents": [],
+    "id": "PAT-014",
+    "title": "Claim dependency to future claim",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a sensor. Claim 2 depends from claim 1.",
+    "candidate_output": "Claim 2. The sensor of claim 5, further comprising a housing.",
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ]
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "conduit"
+    ],
+    "id": "PAT-015",
+    "title": "Missing antecedent for conduit",
+    "category": "Claim clarity",
+    "source_claim": "A fluid system comprising a conduit and a pump.",
+    "candidate_output": "A fluid system comprising a pump configured to move fluid through the conduit.",
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ]
   }
 ]
