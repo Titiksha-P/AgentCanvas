@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const API = ((import.meta as any).env.VITE_API_URL || "http://localhost:8080").replace(/\\/$/, "");
+const API = ((import.meta as any).env.VITE_API_URL || "http://localhost:8080").replace(/\/$/, "");
 const READ_ONLY_DEMO = (import.meta as any).env.VITE_DEMO_READ_ONLY === "true";
 type Finding={code:string;message?:string;explanation?:string;severity?:string};
 type History={id:number;type:string;created_at:string;summary:Record<string,unknown>};
@@ -11,7 +11,7 @@ export default function App(){
  async function runBatch(){setBusy(true);setError("");setMode("batch");try{const cases=JSON.parse(batchJson);if(!Array.isArray(cases))throw new Error("Batch JSON must be an array of case objects.");const data=await call("/api/patent-evaluate/batch",{cases,include_llm:false});setReport(data);await refresh();}catch(e){setError(String(e));}finally{setBusy(false);}}
  useEffect(()=>{if(!READ_ONLY_DEMO)refresh()},[]);
  const metrics=report?.baselines?.deterministic_rules||report||{};
- return <main><header><div><span className="eyebrow">AGENTCANVAS / RESEARCH CONSOLE</span><h1>Patent output evaluation</h1><p>Deterministic checks, semantic proxies and reproducible experiments.</p></div><span className="tag">Prototype · v0.2</span></header>
+ return <main><header><div><span className="eyebrow">AGENTCANVAS / RESEARCH CONSOLE</span><h1>Patent output evaluation</h1><p>Deterministic patent-output checks over a transparent synthetic regression set.</p></div><span className="tag">Prototype · v0.2</span></header>
  <section className="actions"><button disabled={busy} onClick={()=>run("rules")}>{busy&&mode==="rules"?"Running…":READ_ONLY_DEMO?"Load deterministic benchmark":"Run deterministic benchmark"}</button>{!READ_ONLY_DEMO&&<button className="secondary" disabled={busy} onClick={()=>run("experiment")}>{busy&&mode==="experiment"?"Running…":"Run baseline comparison"}</button>}<a href={`${API}/docs`} target="_blank" rel="noreferrer">API docs ↗</a></section>
  {!READ_ONLY_DEMO&&<section className="batch"><h2>Batch evaluation</h2><p className="muted">Paste an array of case objects using the schema in backend/patent_cases.json (maximum 100 cases).</p><textarea value={batchJson} onChange={e=>setBatchJson(e.target.value)} placeholder="Paste JSON array of patent evaluation cases…" /><button disabled={busy||!batchJson.trim()} onClick={runBatch}>{busy&&mode==="batch"?"Evaluating batch…":"Run batch"}</button></section>}
  {error&&<p className="error">{error}</p>}
