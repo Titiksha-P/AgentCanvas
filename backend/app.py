@@ -19,7 +19,7 @@ app = FastAPI(title="AgentCanvas AI Gateway", version="2.1.0")
 app.include_router(patent_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS", "http://localhost:5500,http://127.0.0.1:5500,http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -227,14 +227,6 @@ def health() -> dict[str, Any]:
         "patent_benchmark_available": True,
     }
 
-
-@app.get("/api/patent-evaluate")
-def patent_evaluate() -> dict[str, Any]:
-    """Run the offline synthetic patent-output benchmark; no API key is required."""
-    try:
-        return run_benchmark()
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
 
 
 @app.post("/api/evaluate", response_model=EvaluationResponse)
