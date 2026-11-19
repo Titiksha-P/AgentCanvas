@@ -32,6 +32,7 @@ class PatentEvaluationCase(BaseModel):
     required_phrases: list[str] = Field(default_factory=list)
     unsupported_features: list[str] = Field(default_factory=list)
     evidence_ids: list[str] = Field(default_factory=list)
+    evidence_quotes: list[str] = Field(default_factory=list)
     invalid_dependency_references: list[int] = Field(default_factory=list)
     missing_antecedents: list[str] = Field(default_factory=list)
     expected_issue_codes: list[str] = Field(default_factory=list)
@@ -39,6 +40,8 @@ class PatentEvaluationCase(BaseModel):
     annotation_status: Literal["synthetic_test_oracle"] = "synthetic_test_oracle"
     annotation_rationale: str = ""
     evidence_spans: list[dict[str, str]] = Field(default_factory=list)
+ISSUE_CODES = {"CLAIM_LIMITATION_OMITTED", "UNSUPPORTED_TECHNICAL_ASSERTION", "UNVERIFIED_PATENT_CITATION", "INVALID_CLAIM_DEPENDENCY", "ANTECEDENT_BASIS_MISSING", "EVIDENCE_QUOTE_NOT_REPRODUCED", "POSSIBLE_POLARITY_CHANGE"}
+
 CITATION_RE = re.compile(r"\b(?:US|EP|WO)-?\d{4,}(?:-[A-Z]\d?)?\b", re.I)
 
 
@@ -72,6 +75,15 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
                 "code": "UNSUPPORTED_TECHNICAL_ASSERTION",
                 "message": f"Candidate introduces a feature not present in the source: {feature}",
             })
+
+    for quote in case.get("evidence_quotes", []):
+        if _normalise(quote) not in candidate:
+            findings.append({"code": "EVIDENCE_QUOTE_NOT_REPRODUCED", "message": f"Configured evidence quote is absent from the candidate: {quote}"})
+
+    source_negation = bool(re.search(r"\\b(no|not|without|excluding)\\b", source))
+    candidate_negation = bool(re.search(r"\\b(no|not|without|excluding)\\b", candidate))
+    if source_negation != candidate_negation:
+        findings.append({"code": "POSSIBLE_POLARITY_CHANGE", "message": "Negation markers differ between source and candidate."})
 
     for citation in CITATION_RE.findall(case["candidate_output"]):
         if citation.upper() not in evidence_ids:
@@ -139,6 +151,10 @@ def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     fn = sum(item["false_negatives"] for item in results)
     precision = round(tp / (tp + fp), 4) if tp + fp else 1.0
     recall = round(tp / expected_total, 4) if expected_total else 1.0
+    expected_sets = [set(item["expected_issue_codes"]) for item in results]
+    detected_sets = [set(item["detected_issue_codes"]) for item in results]
+    tn = sum(len(ISSUE_CODES - (a | b)) for a, b in zip(expected_sets, detected_sets))
+    false_positive_rate = round(fp / (fp + tn), 4) if fp + tn else 0.0
     f1 = round(2 * precision * recall / (precision + recall), 4) if precision + recall else 0.0
     return {
         "benchmark_name": "AgentCanvas Patent Output Failure-Mode Benchmark",
@@ -155,7 +171,8 @@ def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
         "precision": precision,
         "recall": recall,
         "f1": f1,
-        "false_positive_rate_proxy": round(fp / (tp + fp), 4) if tp + fp else 0.0,
+        "true_negatives": tn,
+        "false_positive_rate": false_positive_rate,
         "duration_ms": round((time.perf_counter() - started) * 1000),
         "detection_rate_percent": round(recall * 100, 1),
         "results": results,
