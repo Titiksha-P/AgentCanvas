@@ -1,0 +1,21 @@
+{
+  "dataset_id": "OCE-PT-00002",
+  "name": "USPTO Patent Claims Research Dataset",
+  "publisher": "United States Patent and Trademark Office, Office of the Chief Economist",
+  "source_url": "https://data.uspto.gov/bulkdata/datasets/ptappclm",
+  "landing_page": "https://www.uspto.gov/ip-policy/economic-research/research-datasets/patent-claims-research-dataset",
+  "catalog_url": "https://catalog.data.gov/dataset/patent-and-patent-application-claims-research-dataset-for-academia-and-researche-1976-2014",
+  "license": "CC0 1.0 Public Domain Dedication",
+  "temporal_coverage": "US patents granted 1976-2014; US patent applications published 2001-2014",
+  "content": "Parsed claim text, claim-level statistics, document-level statistics, and claim dependency relationships.",
+  "source_task": "Public claim-text and structural reference corpus",
+  "annotation_status": "Unlabelled source corpus. No AgentCanvas defect labels, candidate outputs, or attorney review are supplied.",
+  "intended_use": "Claim segmentation and dependency parsing tests; source text for future paired evaluation examples after separate annotation.",
+  "limitations": [
+    "Large download; individual claim full-text CSV is listed at approximately 4.41 GB.",
+    "The source corpus does not label generated-output defects such as omission, polarity drift, unsupported additions, or evidence mismatch.",
+    "Patent grant/application outcomes must not be treated as ground truth for claim-text defect labels.",
+    "Keep document-family members in one evaluation split to reduce leakage."
+  ],
+  "citation": "Marco, Alan C., Sarnoff, Joshua D., and DeGrazia, Charles A.W. (2019). Patent claims and patent scope. Research Policy 48(9). https://doi.org/10.1016/j.respol.2019.03.015"
+}

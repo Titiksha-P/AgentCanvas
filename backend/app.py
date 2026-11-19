@@ -4,18 +4,25 @@ import time
 from typing import Any
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="AgentCanvas AI Gateway", version="2.0.0")
+try:
+    from .patent_api import require_write_access, router as patent_router
+except ImportError:  # uvicorn app:app from backend/
+    from patent_api import require_write_access, router as patent_router
+
+
+app = FastAPI(title="AgentCanvas AI Gateway", version="2.1.0")
+app.include_router(patent_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS", "http://localhost:5500,http://127.0.0.1:5500,http://localhost:5173,http://127.0.0.1:5173").split(",") if origin.strip()],
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
@@ -217,10 +224,12 @@ def health() -> dict[str, Any]:
         "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
         "security_api_url": SECURITY_API_URL,
         "model": OPENAI_MODEL,
+        "patent_benchmark_available": True,
     }
 
 
-@app.post("/api/evaluate", response_model=EvaluationResponse)
+
+@app.post("/api/evaluate", response_model=EvaluationResponse, dependencies=[Depends(require_write_access)])
 async def evaluate(req: EvaluationRequest) -> EvaluationResponse:
     client = get_openai_client()
     agent_response, latency_ms = generate_agent_response(client, req)

@@ -1,0 +1,430 @@
+[
+  {
+    "id": "PAT-001",
+    "title": "Omitted sensor limitation",
+    "category": "Claim fidelity",
+    "source_claim": "A monitoring apparatus comprising a temperature sensor, wherein the temperature sensor is configured to measure a surface temperature and transmit a measurement signal to a controller.",
+    "candidate_output": "A monitoring apparatus comprising a temperature sensor that transmits a measurement signal to a controller.",
+    "required_phrases": [
+      "wherein the temperature sensor is configured to measure a surface temperature"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "id": "PAT-002",
+    "title": "Unsupported technical feature",
+    "category": "Unsupported assertions",
+    "source_claim": "A dispensing device comprising a reservoir and a valve coupled to an outlet, the valve controlling fluid flow from the reservoir.",
+    "candidate_output": "A dispensing device comprising a reservoir, a valve coupled to an outlet, and a wireless charging module that powers the valve.",
+    "required_phrases": [],
+    "unsupported_features": [
+      "wireless charging module"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "id": "PAT-003",
+    "title": "Unverified patent citation",
+    "category": "Citation verification",
+    "source_claim": "A sensor assembly comprising an optical emitter and a photodetector arranged to detect reflected light.",
+    "candidate_output": "The sensor assembly uses an optical emitter and photodetector. This arrangement is disclosed in US-9999999-A.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "US-2024012345-A1"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "id": "PAT-004",
+    "title": "Invalid dependent-claim reference",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a base apparatus. Claim 2 depends from claim 1 and adds a removable cover.",
+    "candidate_output": "Claim 4. The apparatus of claim 7, further comprising a removable cover.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      7
+    ],
+    "missing_antecedents": [],
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "id": "PAT-005",
+    "title": "Missing antecedent basis",
+    "category": "Claim clarity",
+    "source_claim": "An actuator assembly comprising an actuator and a controller configured to operate the actuator.",
+    "candidate_output": "An assembly comprising a controller configured to operate the actuator.",
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "actuator"
+    ],
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [
+      "concentration from 2 to 5 percent by weight"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-006",
+    "title": "Omitted numeric range",
+    "category": "Claim fidelity",
+    "source_claim": "A battery comprising an electrolyte having a concentration from 2 to 5 percent by weight.",
+    "candidate_output": "A battery comprising an electrolyte.",
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [
+      "titanium reinforcement layer"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-007",
+    "title": "Unsupported material addition",
+    "category": "Unsupported assertions",
+    "source_claim": "A housing formed from a polymer and supporting a circuit board.",
+    "candidate_output": "A housing formed from a polymer and supporting a circuit board, with a titanium reinforcement layer.",
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-008",
+    "title": "Second unverified citation",
+    "category": "Citation verification",
+    "source_claim": "A method of calibrating a pressure sensor.",
+    "candidate_output": "The method is described in EP-7654321-A1.",
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      9
+    ],
+    "missing_antecedents": [],
+    "id": "PAT-009",
+    "title": "Dependent claim references missing claim",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a valve.",
+    "candidate_output": "Claim 3. The valve of claim 9, wherein the valve is spring-loaded.",
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "processor"
+    ],
+    "id": "PAT-010",
+    "title": "Missing antecedent for processor",
+    "category": "Claim clarity",
+    "source_claim": "A computing device comprising a processor.",
+    "candidate_output": "A computing device configured to send data to the processor.",
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [
+      "a filter configured to reject ambient light"
+    ],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-011",
+    "title": "Two omitted limitations",
+    "category": "Claim fidelity",
+    "source_claim": "A sensor comprising an optical emitter, a photodetector, and a filter configured to reject ambient light.",
+    "candidate_output": "A sensor comprising an optical emitter and a photodetector.",
+    "expected_issue_codes": [
+      "CLAIM_LIMITATION_OMITTED"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [
+      "satellite communication"
+    ],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-012",
+    "title": "Unsupported network capability",
+    "category": "Unsupported assertions",
+    "source_claim": "A controller coupled to a motor.",
+    "candidate_output": "A controller coupled to a motor and configured for satellite communication.",
+    "expected_issue_codes": [
+      "UNSUPPORTED_TECHNICAL_ASSERTION"
+    ],
+    "severity": "high",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "WO-2020987654-A1"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "id": "PAT-013",
+    "title": "Evidence identifier mismatch",
+    "category": "Citation verification",
+    "source_claim": "A fluid pump with an impeller.",
+    "candidate_output": "The pump architecture appears in WO-2020123456-A1.",
+    "expected_issue_codes": [
+      "UNVERIFIED_PATENT_CITATION"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [
+      5
+    ],
+    "missing_antecedents": [],
+    "id": "PAT-014",
+    "title": "Claim dependency to future claim",
+    "category": "Claim dependency",
+    "source_claim": "Claim 1 defines a sensor. Claim 2 depends from claim 1.",
+    "candidate_output": "Claim 2. The sensor of claim 5, further comprising a housing.",
+    "expected_issue_codes": [
+      "INVALID_CLAIM_DEPENDENCY"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [
+      "conduit"
+    ],
+    "id": "PAT-015",
+    "title": "Missing antecedent for conduit",
+    "category": "Claim clarity",
+    "source_claim": "A fluid system comprising a conduit and a pump.",
+    "candidate_output": "A fluid system comprising a pump configured to move fluid through the conduit.",
+    "expected_issue_codes": [
+      "ANTECEDENT_BASIS_MISSING"
+    ],
+    "severity": "medium",
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [
+      "configured to measure pressure"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-016",
+    "title": "Configured evidence quotation omitted",
+    "category": "Evidence traceability",
+    "source_claim": "A pressure sensor configured to measure pressure in a fluid conduit.",
+    "candidate_output": "A pressure sensor is positioned in a fluid conduit.",
+    "expected_issue_codes": [
+      "EVIDENCE_QUOTE_NOT_REPRODUCED"
+    ],
+    "severity": "medium"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-017",
+    "title": "Polarity change in generated claim",
+    "category": "Semantic consistency",
+    "source_claim": "A power module operating without an auxiliary battery.",
+    "candidate_output": "A power module operating with an auxiliary battery.",
+    "expected_issue_codes": [
+      "POSSIBLE_POLARITY_CHANGE"
+    ],
+    "severity": "high"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-018",
+    "title": "Clean control claim",
+    "category": "Negative control",
+    "source_claim": "A computing device comprising a processor and a memory coupled to the processor.",
+    "candidate_output": "A computing device comprising a processor and a memory coupled to the processor.",
+    "expected_issue_codes": [],
+    "severity": "low"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "US-2024012345-A1"
+    ],
+    "evidence_quotes": [
+      "an optical emitter"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-019",
+    "title": "Evidence quote and citation match",
+    "category": "Negative control",
+    "source_claim": "A sensor assembly comprising an optical emitter and photodetector.",
+    "candidate_output": "A sensor assembly comprising an optical emitter and photodetector. The evidence describes an optical emitter.",
+    "expected_issue_codes": [],
+    "severity": "low"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-020",
+    "title": "Valid claim dependency control",
+    "category": "Negative control",
+    "source_claim": "Claim 1 defines a pump. Claim 2 depends from claim 1 and adds a filter.",
+    "candidate_output": "Claim 2. The pump of claim 1, further comprising a filter.",
+    "expected_issue_codes": [],
+    "severity": "low"
+  }
+]

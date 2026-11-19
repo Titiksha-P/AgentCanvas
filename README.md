@@ -219,3 +219,74 @@ For a public deployment, set `window.AGENTCANVAS_API_URL` before `js/api.js` loa
 - Policy and compliance analysis
 - Threat simulation
 - Audit and security reporting
+
+## Patent Output Failure-Mode Benchmark
+
+AgentCanvas now includes an offline deterministic mini-benchmark for five patent-language failure modes: claim-limitation omission, unsupported technical assertions, unverified patent citation identifiers, invalid dependent-claim references, and missing antecedent basis.
+
+The benchmark is served at GET /api/patent-evaluate and is available without an OpenAI API key or the external security engine. Start the gateway from backend with `uvicorn app:app --host 0.0.0.0 --port 8080`, serve the repository root with `python -m http.server 5500`, and open `http://localhost:5500/patent-evaluation.html`.
+
+The benchmark fixtures and candidate outputs are synthetic and hand-authored. The rules are string/pattern heuristics, not a trained legal model. Citation membership does not establish substantive support. The prototype does not assess novelty, inventive step, infringement, patentability, or legal sufficiency.
+
+### Cognisynth relationship
+
+The implementation follows Cognisynth's principle that model-generated output is untrusted until independently checked. The patent-specific evaluator is intentionally separate from Cognisynth's existing UI blueprint validator because UI safety invariants are not valid patent-drafting checks. This benchmark uses explicit violation codes, fail-closed error handling, and case-level precision/recall reporting.
+
+### Tests
+
+From the repository root, run `python -m pip install -r backend/requirements.txt` and then `python -m unittest discover -s backend/tests -v`. The current 20-case regression suite contains 15 labelled defect cases and 5 clean controls. Its expected fixture result is 100% recall and zero false positives on these synthetic cases only; it is not a real-world accuracy estimate.
+## Patent evaluation research workbench v0.2
+
+The patent evaluation module now includes **20 synthetic, hand-authored regression cases**. Each case carries an issue-code oracle, severity, annotation status, and rationale. These are test annotations, not expert legal annotations.
+
+### Components
+- `backend/patent_eval.py`: strict Pydantic case schema and deterministic patent-text checks.
+- `backend/cognisynth_adapter.py`: Cognisynth-inspired fail-closed output gate. It adapts the invariant-gate pattern to patent evaluation; it does not reuse Cognisynth's UI blueprint validator as patent logic.
+- `backend/patent_research.py`: lexical semantic proxy, optional OpenAI LLM judge, hybrid evaluator, micro precision/recall/F1 and experiment JSONL logging.
+- `backend/patent_store.py`: SQLAlchemy persistence. SQLite is the local default; PostgreSQL is supported through `DATABASE_URL`.
+- `backend/patent_api.py`: single-run, bounded batch (up to 100 cases, at most 8 in-process workers), experiment and history endpoints.
+- `frontend/`: React + TypeScript evaluation console with benchmark, baseline comparison, JSON batch submission and history.
+- `research/patent-dataset/README.md`: corpus scope and annotation protocol.
+- `research/patent-evaluation/TECHNICAL_REPORT.md`: methodology, baseline design, metrics, limitations and reproduction.
+
+### Patent API endpoints
+
+```http
+GET  /api/patent-evaluate   # read-only preview
+POST /api/patent-evaluate  # execute and persist
+POST /api/patent-evaluate/batch
+POST /api/patent-experiments
+GET  /api/patent-history?limit=25
+```
+
+The batch request body is an object containing `cases` (an array of up to 100 case objects matching `backend/patent_cases.json`) and optional `include_llm`. The LLM judge is off by default and requires a server-side `OPENAI_API_KEY`. LLM output is advisory and never overrides deterministic rule findings.
+
+### Run the React console
+
+In one terminal, start the API as described above. In another:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Set `VITE_API_URL` at build time if the API is not at `http://localhost:8080`.
+
+### Persistent history
+
+SQLite is used by default and writes `agentcanvas_patent.db` in the backend process working directory. For PostgreSQL, install dependencies and set a connection string, for example:
+
+```bash
+DATABASE_URL=postgresql+psycopg://USER:PASSWORD@HOST:5432/agentcanvas
+```
+
+The schema is initialized with SQLAlchemy `create_all`; a production deployment still needs managed database provisioning, migrations, backups, access control and retention policy.
+
+### Cognisynth integration boundary
+
+Cognisynth's `safety/formal_validator.py` validates cognitive UI blueprints, including navigation reachability, critical controls and rendering constraints. Those invariants do not describe patent claim quality. AgentCanvas therefore uses a domain-specific adapter that mirrors the core safety pattern: strict input contracts, explicit invariants, validation of untrusted evaluator output, and fail-closed rejection of malformed results. No claim is made that the existing UI validator itself performs patent review.
+
+### Reproducibility and honest limits
+
+Run `python -m unittest discover -s backend/tests -v` and `python -m compileall -q backend`. GitHub Actions also builds the React/TypeScript frontend. The semantic baseline is a lexical/polarity heuristic, not a true semantic model. The optional LLM baseline needs credentials and was not exercised by offline CI. No expert-annotated corpus, inter-annotator agreement, prior-art retrieval, distributed job queue, production PostgreSQL instance, authentication, or legal validation is included. Synthetic fixture metrics must not be presented as real-world accuracy or patent-law conclusions.

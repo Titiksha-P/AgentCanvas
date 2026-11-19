@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentCanvas Patent Evaluation Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "category", "source_claim", "candidate_output"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "source_claim": {"type": "string", "minLength": 1},
+    "candidate_output": {"type": "string", "minLength": 1},
+    "required_phrases": {"type": "array", "items": {"type": "string"}},
+    "unsupported_features": {"type": "array", "items": {"type": "string"}},
+    "evidence_ids": {"type": "array", "items": {"type": "string"}},
+    "evidence_quotes": {"type": "array", "items": {"type": "string"}},
+    "invalid_dependency_references": {"type": "array", "items": {"type": "integer", "minimum": 1}},
+    "missing_antecedents": {"type": "array", "items": {"type": "string"}},
+    "expected_issue_codes": {"type": "array", "items": {"type": "string"}},
+    "severity": {"enum": ["low", "medium", "high", "critical"]},
+    "annotation_status": {"const": "synthetic_test_oracle"},
+    "annotation_rationale": {"type": "string"},
+    "evidence_spans": {"type": "array", "items": {"type": "object", "additionalProperties": {"type": "string"}}}
+  }
+}

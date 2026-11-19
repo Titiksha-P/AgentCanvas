@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patent Evaluation Benchmark · AgentCanvas</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .benchmark-hero{padding:64px 0 34px;max-width:900px}.benchmark-hero h1{font-size:clamp(2.4rem,5vw,4.2rem)}
+    .benchmark-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.meta-chip{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:.85rem}
+    .benchmark-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.benchmark-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+    .benchmark-case{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--panel-2);display:grid;gap:12px}
+    .case-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.case-id{font-size:.78rem;color:var(--muted);letter-spacing:.08em}
+    .case-title{font-size:1.05rem;font-weight:750}.case-category{font-size:.82rem;color:var(--muted)}
+    .case-status{font-size:.8rem;font-weight:800;border-radius:999px;padding:6px 9px;background:rgba(85,214,190,.13);color:#8ff4df}
+    .case-status.missed{background:rgba(255,123,134,.14);color:#ffb1b8}
+    .finding{border-left:3px solid var(--warning);padding:9px 11px;background:rgba(255,255,255,.035);border-radius:8px;font-size:.88rem;color:var(--muted)}
+    .case-copy{font-size:.86rem;line-height:1.55;color:var(--muted);overflow-wrap:anywhere}.case-copy strong{color:var(--text)}
+    .metric strong{font-variant-numeric:tabular-nums}.notice.error{background:rgba(255,123,134,.1);color:#ffb1b8}
+    @media(max-width:900px){.benchmark-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.benchmark-meta{gap:7px}}
+    @media(max-width:600px){.benchmark-grid{grid-template-columns:1fr}.benchmark-hero{padding-top:55px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">AgentCanvas</a>
+    <nav><a href="index.html#builder">Builder</a><a href="index.html#simulation">Simulation</a><a href="patent-evaluation.html">Patent benchmark</a></nav>
+  </header>
+  <main class="container">
+    <section class="hero benchmark-hero">
+      <span class="eyebrow">Research prototype · Benchmark v0.2.0</span>
+      <h1>Evaluate failure modes in patent-language AI outputs.</h1>
+      <p>A reproducible, deterministic mini-benchmark for claim fidelity, unsupported assertions, citation references, claim dependencies and antecedent basis. Twenty synthetic fixtures. Inspect every finding.</p>
+      <div class="benchmark-meta"><span class="meta-chip">AgentCanvas evaluation layer</span><span class="meta-chip">Cognisynth-inspired fail-closed validation</span><span class="meta-chip">Synthetic fixtures only</span></div>
+    </section>
+    <section class="panel">
+      <div class="section-heading"><span>01</span><div><h2>Benchmark run</h2><p>Run all twenty fixed cases through the deterministic evaluation pipeline.</p></div></div>
+      <div class="benchmark-controls"><button id="run-benchmark" class="button primary">Run patent benchmark</button><span id="run-status" class="case-category">Not run yet</span></div>
+      <div id="benchmark-error" class="notice error hidden"></div>
+    </section>
+    <section id="summary" class="panel hidden">
+      <div class="section-heading"><span>02</span><div><h2>Aggregate results</h2><p>Measured against the expected failure labels in the synthetic fixtures.</p></div></div>
+      <div class="benchmark-grid">
+        <article class="metric"><strong id="metric-detection">—</strong><span>Expected issue detection</span></article>
+        <article class="metric"><strong id="metric-precision">—</strong><span>Precision</span></article>
+        <article class="metric"><strong id="metric-recall">—</strong><span>Recall</span></article>
+        <article class="metric"><strong id="metric-cases">—</strong><span>Cases fully detected</span></article>
+      </div>
+      <div class="status-grid">
+        <article class="result-card"><div class="card-label">False positives</div><p id="metric-fp">—</p></article>
+        <article class="result-card"><div class="card-label">False negatives</div><p id="metric-fn">—</p></article>
+        <article class="result-card"><div class="card-label">Evaluation mode</div><p id="metric-mode">—</p></article>
+      </div>
+    </section>
+    <section id="case-results" class="panel hidden">
+      <div class="section-heading"><span>03</span><div><h2>Failure-mode inspection</h2><p>Each card shows the source, candidate output, expected issue and detected findings.</p></div></div>
+      <div id="case-list" class="benchmark-grid"></div>
+    </section>
+    <section class="panel">
+      <div class="section-heading"><span>04</span><div><h2>Methodology and boundaries</h2><p>Designed for transparent inspection, not legal conclusions.</p></div></div>
+      <div class="explanation-list">
+        <div class="explanation"><strong>Claim fidelity:</strong> checks whether configured source limitations remain present in the candidate text.</div>
+        <div class="explanation"><strong>Unsupported assertions:</strong> flags configured technical features appearing in the candidate but not the source.</div>
+        <div class="explanation"><strong>Citation verification:</strong> checks citation identifiers against the supplied evidence-ID set. It does not verify substantive support.</div>
+        <div class="explanation"><strong>Claim dependency:</strong> flags explicitly configured references to unavailable or later claims.</div>
+        <div class="explanation"><strong>Antecedent basis:</strong> flags a configured definite element when no indefinite introduction appears in the candidate.</div>
+        <div class="explanation"><strong>Deterministic gate:</strong> schema-backed fixture inputs and explicit rule findings follow Cognisynth's principle that generated output is untrusted until independently checked.</div>
+      </div>
+      <p class="case-copy">Limitations: synthetic, hand-authored fixtures; string and pattern heuristics; no live LLM call; no external prior-art retrieval; no novelty, inventive-step, infringement or legal-sufficiency analysis. A 100% score means only that the configured synthetic failure labels were detected by these configured rules.</p>
+    </section>
+  </main>
+  <footer>AgentCanvas · Patent Output Failure-Mode Benchmark · Research prototype only</footer>
+  <script src="js/patent-evaluation.js"></script>
+</body>
+</html>

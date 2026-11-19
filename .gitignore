@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+frontend/dist/
+agentcanvas_patent.db
+*.sqlite
+patent_experiments.jsonl
+.env
+.env.*
+!.env.example
