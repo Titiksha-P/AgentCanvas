@@ -22,7 +22,9 @@ class PatentApiTests(unittest.TestCase):
             factory = sessionmaker(bind=engine, autoflush=False, autocommit=False)
             with patch.object(patent_store, "engine", engine), patch.object(patent_store, "SessionLocal", factory):
                 with TestClient(app) as client:
-                    benchmark = client.get("/api/patent-evaluate")
+                    preview = client.get("/api/patent-evaluate")
+                    self.assertEqual(preview.status_code, 200)
+                    benchmark = client.post("/api/patent-evaluate")
                     self.assertEqual(benchmark.status_code, 200)
                     self.assertEqual(benchmark.json()["case_count"], 20)
                     self.assertTrue(benchmark.json()["results"][0]["safety_gate"]["accepted"])
