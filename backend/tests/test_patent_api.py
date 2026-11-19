@@ -24,7 +24,7 @@ class PatentApiTests(unittest.TestCase):
                 with TestClient(app) as client:
                     benchmark = client.get("/api/patent-evaluate")
                     self.assertEqual(benchmark.status_code, 200)
-                    self.assertEqual(benchmark.json()["case_count"], 15)
+                    self.assertEqual(benchmark.json()["case_count"], 20)
                     self.assertTrue(benchmark.json()["results"][0]["safety_gate"]["accepted"])
 
                     cases = json.loads((BACKEND / "patent_cases.json").read_text(encoding="utf-8"))
