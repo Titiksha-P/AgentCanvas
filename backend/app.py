@@ -4,15 +4,15 @@ import time
 from typing import Any
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
 try:
-    from .patent_api import router as patent_router
+    from .patent_api import require_write_access, router as patent_router
 except ImportError:  # uvicorn app:app from backend/
-    from patent_api import router as patent_router
+    from patent_api import require_write_access, router as patent_router
 
 
 app = FastAPI(title="AgentCanvas AI Gateway", version="2.1.0")
@@ -229,7 +229,7 @@ def health() -> dict[str, Any]:
 
 
 
-@app.post("/api/evaluate", response_model=EvaluationResponse)
+@app.post("/api/evaluate", response_model=EvaluationResponse, dependencies=[Depends(require_write_access)])
 async def evaluate(req: EvaluationRequest) -> EvaluationResponse:
     client = get_openai_client()
     agent_response, latency_ms = generate_agent_response(client, req)
