@@ -18,7 +18,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "id": "PAT-002",
@@ -39,7 +40,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "id": "PAT-003",
@@ -60,7 +62,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "id": "PAT-004",
@@ -81,7 +84,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "id": "PAT-005",
@@ -102,7 +106,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [
@@ -123,7 +128,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -144,7 +150,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -163,7 +170,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -184,7 +192,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -205,7 +214,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [
@@ -226,7 +236,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -247,7 +258,8 @@
     "severity": "high",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -268,7 +280,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -289,7 +302,8 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
   },
   {
     "required_phrases": [],
@@ -310,6 +324,107 @@
     "severity": "medium",
     "annotation_status": "synthetic_test_oracle",
     "annotation_rationale": "Hand-authored expected label for deterministic regression testing; requires independent expert adjudication before legal or research use.",
-    "evidence_spans": []
+    "evidence_spans": [],
+    "evidence_quotes": []
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [
+      "configured to measure pressure"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-016",
+    "title": "Configured evidence quotation omitted",
+    "category": "Evidence traceability",
+    "source_claim": "A pressure sensor configured to measure pressure in a fluid conduit.",
+    "candidate_output": "A pressure sensor is positioned in a fluid conduit.",
+    "expected_issue_codes": [
+      "EVIDENCE_QUOTE_NOT_REPRODUCED"
+    ],
+    "severity": "medium"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-017",
+    "title": "Polarity change in generated claim",
+    "category": "Semantic consistency",
+    "source_claim": "A power module operating without an auxiliary battery.",
+    "candidate_output": "A power module operating with an auxiliary battery.",
+    "expected_issue_codes": [
+      "POSSIBLE_POLARITY_CHANGE"
+    ],
+    "severity": "high"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-018",
+    "title": "Clean control claim",
+    "category": "Negative control",
+    "source_claim": "A computing device comprising a processor and a memory coupled to the processor.",
+    "candidate_output": "A computing device comprising a processor and a memory coupled to the processor.",
+    "expected_issue_codes": [],
+    "severity": "low"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [
+      "US-2024012345-A1"
+    ],
+    "evidence_quotes": [
+      "an optical emitter"
+    ],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-019",
+    "title": "Evidence quote and citation match",
+    "category": "Negative control",
+    "source_claim": "A sensor assembly comprising an optical emitter and photodetector.",
+    "candidate_output": "A sensor assembly comprising an optical emitter and photodetector. The evidence describes an optical emitter.",
+    "expected_issue_codes": [],
+    "severity": "low"
+  },
+  {
+    "required_phrases": [],
+    "unsupported_features": [],
+    "evidence_ids": [],
+    "evidence_quotes": [],
+    "invalid_dependency_references": [],
+    "missing_antecedents": [],
+    "annotation_status": "synthetic_test_oracle",
+    "annotation_rationale": "Synthetic regression oracle; not expert adjudicated.",
+    "evidence_spans": [],
+    "id": "PAT-020",
+    "title": "Valid claim dependency control",
+    "category": "Negative control",
+    "source_claim": "Claim 1 defines a pump. Claim 2 depends from claim 1 and adds a filter.",
+    "candidate_output": "Claim 2. The pump of claim 1, further comprising a filter.",
+    "expected_issue_codes": [],
+    "severity": "low"
   }
 ]
