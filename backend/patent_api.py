@@ -1,0 +1,71 @@
+"""Patent benchmark, batch, experiment and history API routes."""
+from __future__ import annotations
+import json
+from pathlib import Path
+from typing import Any
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, ConfigDict, Field
+
+try:
+    from .patent_eval import run_benchmark, evaluate_case, PatentEvaluationCase
+    from .patent_research import run_experiment, evaluate_hybrid
+    from .patent_store import save_evaluation, list_evaluations
+except ImportError:  # uvicorn app:app when launched inside backend/
+    from patent_eval import run_benchmark, evaluate_case, PatentEvaluationCase
+    from patent_research import run_experiment, evaluate_hybrid
+    from patent_store import save_evaluation, list_evaluations
+
+router = APIRouter()
+CASES_PATH = Path(__file__).with_name("patent_cases.json")
+
+class BatchRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    cases: list[PatentEvaluationCase] = Field(min_length=1, max_length=100)
+    include_llm: bool = False
+
+class ExperimentRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    include_llm: bool = False
+
+@router.get("/api/patent-evaluate")
+def patent_evaluate() -> dict[str, Any]:
+    try:
+        result = run_benchmark()
+        record_id = save_evaluation("rules", {"case_count": result["case_count"], "precision": result["precision"],
+            "recall": result["recall"], "f1": result.get("f1")}, result)
+        result["history_id"] = record_id
+        return result
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
+
+@router.post("/api/patent-evaluate/batch")
+def patent_evaluate_batch(request: BatchRequest) -> dict[str, Any]:
+    try:
+        cases = [item.model_dump() for item in request.cases]
+        results = [evaluate_hybrid(case, use_llm=request.include_llm) for case in cases]
+        summary = {"case_count": len(results), "llm_enabled": request.include_llm,
+                   "finding_count": sum(len(item["combined_findings"]) for item in results)}
+        record_id = save_evaluation("batch_hybrid", summary, {"results": results})
+        return {"history_id": record_id, **summary, "results": results}
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Batch evaluation failed: {exc}") from exc
+
+@router.post("/api/patent-experiments")
+def patent_experiments(request: ExperimentRequest) -> dict[str, Any]:
+    try:
+        cases = json.loads(CASES_PATH.read_text(encoding="utf-8"))
+        report = run_experiment(cases, include_llm=request.include_llm)
+        record_id = save_evaluation("experiment", report["baselines"], report)
+        report["history_id"] = record_id
+        return report
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Experiment failed: {exc}") from exc
+
+@router.get("/api/patent-history")
+def patent_history(limit: int = 25) -> dict[str, Any]:
+    if not 1 <= limit <= 100:
+        raise HTTPException(status_code=422, detail="limit must be between 1 and 100")
+    try:
+        return {"items": list_evaluations(limit)}
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"Evaluation history unavailable: {exc}") from exc
