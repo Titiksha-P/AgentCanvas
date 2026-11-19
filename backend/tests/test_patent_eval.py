@@ -6,7 +6,6 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 from patent_eval import PatentEvaluationCase, evaluate_case, run_benchmark
-from cognisynth_adapter import CognisynthSafetyGate
 from patent_research import classification_metrics, semantic_heuristic, run_experiment
 
 
@@ -57,7 +56,7 @@ class PatentBenchmarkTests(unittest.TestCase):
         self.assertEqual(report["dataset_size"], 3)
         self.assertIn("deterministic_rules", report["baselines"])
         self.assertIn("semantic_heuristic", report["baselines"])
-        self.assertIn("hybrid_rules_plus_heuristic", report["baselines"])
+        self.assertIn("hybrid_rules_semantic_llm", report["baselines"])
 
 
 if __name__ == "__main__":
