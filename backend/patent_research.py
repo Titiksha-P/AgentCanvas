@@ -100,19 +100,36 @@ def run_experiment(cases: list[dict[str, Any]], include_llm: bool = False) -> di
     expected = [set(c.get("expected_issue_codes", [])) for c in cases]
     rules = [evaluate_case(c) for c in cases]
     semantic = [semantic_heuristic(c) for c in cases]
-    hybrid = [evaluate_hybrid(c, use_llm=include_llm) for c in cases]
+    llm_outputs = [llm_judge(c) for c in cases] if include_llm else [None for _ in cases]
+    hybrid = [evaluate_hybrid(c, use_llm=False) for c in cases]
+    for item, llm in zip(hybrid, llm_outputs):
+        item["llm_result"] = llm
+        if llm:
+            item["combined_findings"].extend(llm["findings"])
     rule_pred = [set(r["detected_issue_codes"]) for r in rules]
     semantic_pred = [set(f["code"] for f in r["findings"]) for r in semantic]
-    hybrid_pred = [set(r["rule_result"]["detected_issue_codes"]) | set(f["code"] for f in r["semantic_result"]["findings"]) for r in hybrid]
-    report = {"experiment_id": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"),
-              "created_at": datetime.now(timezone.utc).isoformat(), "dataset_size": len(cases),
-              "llm_enabled": include_llm, "duration_ms": round((time.perf_counter()-started)*1000),
-              "baselines": {"deterministic_rules": classification_metrics(expected, rule_pred),
-                            "semantic_heuristic": classification_metrics(expected, semantic_pred),
-                            "hybrid_rules_plus_heuristic": classification_metrics(expected, hybrid_pred)},
-              "per_case": [{"id": c["id"], "rules": r, "semantic": s, "hybrid": h}
-                           for c, r, s, h in zip(cases, rules, semantic, hybrid)],
-              "caveat": "Synthetic fixture metrics only; issue-code coverage is not real-world patent QA accuracy."}
+    llm_pred = [set(f.get("code", "") for f in (r["findings"] if r else [])) - {""} for r in llm_outputs]
+    hybrid_pred = [set(r["rule_result"]["detected_issue_codes"]) |
+                   set(f["code"] for f in r["semantic_result"]["findings"]) | llm_codes
+                   for r, llm_codes in zip(hybrid, llm_pred)]
+    report = {
+        "experiment_id": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "dataset_size": len(cases),
+        "llm_enabled": include_llm,
+        "duration_ms": round((time.perf_counter() - started) * 1000),
+        "baselines": {
+            "deterministic_rules": classification_metrics(expected, rule_pred),
+            "semantic_heuristic": classification_metrics(expected, semantic_pred),
+            "llm_judge": classification_metrics(expected, llm_pred) if include_llm else {
+                "enabled": False, "reason": "Set include_llm=true and configure OPENAI_API_KEY."
+            },
+            "hybrid_rules_semantic_llm": classification_metrics(expected, hybrid_pred),
+        },
+        "per_case": [{"id": c["id"], "rules": r, "semantic": s, "hybrid": h}
+                     for c, r, s, h in zip(cases, rules, semantic, hybrid)],
+        "caveat": "Synthetic fixture metrics only; issue-code coverage is not real-world patent QA accuracy.",
+    }
     EXPERIMENT_LOG.parent.mkdir(parents=True, exist_ok=True)
     with EXPERIMENT_LOG.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps(report, ensure_ascii=False) + "\n")
