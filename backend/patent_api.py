@@ -1,10 +1,12 @@
 """Patent benchmark, batch, experiment and history API routes."""
 from __future__ import annotations
 import json
+import os
+import hmac
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
 try:
@@ -17,6 +19,16 @@ except ImportError:  # uvicorn app:app when launched inside backend/
     from patent_store import save_evaluation, list_evaluations
 
 router = APIRouter()
+
+def require_write_access(authorization: str | None = Header(default=None)) -> None:
+    """Require a server-side bearer token for mutating endpoints in production."""
+    token = os.getenv("AGENTCANVAS_API_TOKEN")
+    production = os.getenv("APP_ENV", "").lower() == "production"
+    if production and not token:
+        raise HTTPException(status_code=503, detail="Write endpoints are disabled until AGENTCANVAS_API_TOKEN is configured.")
+    if token and not hmac.compare_digest(authorization or "", f"Bearer {token}"):
+        raise HTTPException(status_code=401, detail="A valid bearer token is required.")
+
 CASES_PATH = Path(__file__).with_name("patent_cases.json")
 
 class BatchRequest(BaseModel):
@@ -37,7 +49,7 @@ def patent_evaluate() -> dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
 
 
-@router.post("/api/patent-evaluate")
+@router.post("/api/patent-evaluate", dependencies=[Depends(require_write_access)])
 def save_patent_evaluation() -> dict[str, Any]:
     """Execute and persist a benchmark run."""
     try:
@@ -50,7 +62,7 @@ def save_patent_evaluation() -> dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
 
 
-@router.post("/api/patent-evaluate/batch")
+@router.post("/api/patent-evaluate/batch", dependencies=[Depends(require_write_access)])
 def patent_evaluate_batch(request: BatchRequest) -> dict[str, Any]:
     try:
         cases = [item.model_dump() for item in request.cases]
@@ -68,7 +80,7 @@ def patent_evaluate_batch(request: BatchRequest) -> dict[str, Any]:
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Batch evaluation failed: {exc}") from exc
 
-@router.post("/api/patent-experiments")
+@router.post("/api/patent-experiments", dependencies=[Depends(require_write_access)])
 def patent_experiments(request: ExperimentRequest) -> dict[str, Any]:
     try:
         cases = json.loads(CASES_PATH.read_text(encoding="utf-8"))
