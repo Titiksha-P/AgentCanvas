@@ -1,6 +1,6 @@
 # Patent evaluation research dataset v0.2.0
 
-This file contains 15 synthetic, hand-authored fixtures in `patent_cases.json`.
+This file contains 20 synthetic, hand-authored fixtures in `patent_cases.json`.
 Each record includes a source claim, candidate text, explicit annotation metadata,
 and one or more expected issue codes. The labels are engineering test oracles,
 not legal determinations and not annotations by patent attorneys.
@@ -10,7 +10,7 @@ not legal determinations and not annotations by patent attorneys.
 - Unsupported technical additions
 - Citation identifier membership mismatch
 - Invalid claim dependency reference
-- Missing antecedent basis
+- Missing antecedent basis, evidence-quote traceability, polarity changes and clean negative controls
 
 ## Dataset protocol
 The current set is a smoke-test and regression corpus. It is not a representative
