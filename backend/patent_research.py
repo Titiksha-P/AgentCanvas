@@ -15,9 +15,9 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 try:
-    from .patent_eval import evaluate_case
+    from .patent_eval import evaluate_case, ISSUE_CODES
 except ImportError:  # direct module import from backend/
-    from patent_eval import evaluate_case
+    from patent_eval import evaluate_case, ISSUE_CODES
 
 EXPERIMENT_LOG = Path(os.getenv("PATENT_EXPERIMENT_LOG", "patent_experiments.jsonl"))
 
@@ -47,7 +47,7 @@ def semantic_heuristic(case: dict[str, Any]) -> dict[str, Any]:
     src, out = _tokens(source), _tokens(candidate)
     union = src | out
     similarity = len(src & out) / len(union) if union else 1.0
-    negation = bool(re.search(r"\b(no|not|without|excluding)\b", source, re.I)) != bool(
+    negation = bool(re.search("(^|[^a-z])(no|not|without|excluding)([^a-z]|$)", source, re.I)) != bool(
         re.search(r"\b(no|not|without|excluding)\b", candidate, re.I)
     )
     evidence = case.get("evidence_quotes", [])
@@ -103,9 +103,12 @@ def classification_metrics(expected: list[set[str]], predicted: list[set[str]]) 
     precision = tp / (tp + fp) if tp + fp else 1.0
     recall = tp / (tp + fn) if tp + fn else 1.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
-    return {"true_positives": tp, "false_positives": fp, "false_negatives": fn,
+    label_universe = ISSUE_CODES | set().union(*expected, *predicted)
+    tn = sum(len(label_universe - (actual | guessed)) for actual, guessed in zip(expected, predicted))
+    fpr = fp / (fp + tn) if fp + tn else 0.0
+    return {"true_positives": tp, "false_positives": fp, "false_negatives": fn, "true_negatives": tn,
             "precision": round(precision, 4), "recall": round(recall, 4), "f1": round(f1, 4),
-            "false_positive_rate_proxy": round(fp / (tp + fp) if tp + fp else 0.0, 4)}
+            "false_positive_rate": round(fpr, 4)}
 
 
 def run_experiment(cases: list[dict[str, Any]], include_llm: bool = False) -> dict[str, Any]:
