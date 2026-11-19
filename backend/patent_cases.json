@@ -72,7 +72,7 @@
     "title": "Missing antecedent basis",
     "category": "Claim clarity",
     "source_claim": "An actuator assembly comprising an actuator and a controller configured to operate the actuator.",
-    "candidate_output": "An actuator assembly comprising a controller configured to operate the actuator.",
+    "candidate_output": "An assembly comprising a controller configured to operate the actuator.",
     "required_phrases": [],
     "unsupported_features": [],
     "evidence_ids": [],
@@ -84,4 +84,4 @@
       "ANTECEDENT_BASIS_MISSING"
     ]
   }
-]\n
+]
