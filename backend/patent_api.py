@@ -30,6 +30,16 @@ class ExperimentRequest(BaseModel):
 
 @router.get("/api/patent-evaluate")
 def patent_evaluate() -> dict[str, Any]:
+    """Read-only benchmark preview; does not write evaluation history."""
+    try:
+        return run_benchmark()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
+
+
+@router.post("/api/patent-evaluate")
+def save_patent_evaluation() -> dict[str, Any]:
+    """Execute and persist a benchmark run."""
     try:
         result = run_benchmark()
         record_id = save_evaluation("rules", {"case_count": result["case_count"], "precision": result["precision"],
@@ -38,6 +48,7 @@ def patent_evaluate() -> dict[str, Any]:
         return result
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Patent benchmark failed closed: {exc}") from exc
+
 
 @router.post("/api/patent-evaluate/batch")
 def patent_evaluate_batch(request: BatchRequest) -> dict[str, Any]:
