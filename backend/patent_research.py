@@ -32,8 +32,8 @@ def semantic_heuristic(case: dict[str, Any]) -> dict[str, Any]:
     src, out = _tokens(source), _tokens(candidate)
     union = src | out
     similarity = len(src & out) / len(union) if union else 1.0
-    negation = bool(re.search(r"\\b(no|not|without|excluding)\\b", source, re.I)) != bool(
-        re.search(r"\\b(no|not|without|excluding)\\b", candidate, re.I)
+    negation = bool(re.search(r"\b(no|not|without|excluding)\b", source, re.I)) != bool(
+        re.search(r"\b(no|not|without|excluding)\b", candidate, re.I)
     )
     evidence = case.get("evidence_quotes", [])
     evidence_missing = [quote for quote in evidence if quote.lower() not in candidate.lower()]
@@ -115,5 +115,5 @@ def run_experiment(cases: list[dict[str, Any]], include_llm: bool = False) -> di
               "caveat": "Synthetic fixture metrics only; issue-code coverage is not real-world patent QA accuracy."}
     EXPERIMENT_LOG.parent.mkdir(parents=True, exist_ok=True)
     with EXPERIMENT_LOG.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps(report, ensure_ascii=False) + "\\n")
+        stream.write(json.dumps(report, ensure_ascii=False) + "\n")
     return report
