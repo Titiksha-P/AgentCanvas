@@ -2,8 +2,11 @@ import csv
 import json
 import tempfile
 import unittest
+import sys
 from pathlib import Path
 
+BACKEND = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
 from import_uspto_claims import csv_headers, iter_claim_records
 
 
