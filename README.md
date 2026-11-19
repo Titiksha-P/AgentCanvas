@@ -219,3 +219,19 @@ For a public deployment, set `window.AGENTCANVAS_API_URL` before `js/api.js` loa
 - Policy and compliance analysis
 - Threat simulation
 - Audit and security reporting
+
+## Patent Output Failure-Mode Benchmark
+
+AgentCanvas now includes an offline deterministic mini-benchmark for five patent-language failure modes: claim-limitation omission, unsupported technical assertions, unverified patent citation identifiers, invalid dependent-claim references, and missing antecedent basis.
+
+The benchmark is served at GET /api/patent-evaluate and is available without an OpenAI API key or the external security engine. Start the gateway from backend with `uvicorn app:app --host 0.0.0.0 --port 8080`, serve the repository root with `python -m http.server 5500`, and open `http://localhost:5500/patent-evaluation.html`.
+
+The benchmark fixtures and candidate outputs are synthetic and hand-authored. The rules are string/pattern heuristics, not a trained legal model. Citation membership does not establish substantive support. The prototype does not assess novelty, inventive step, infringement, patentability, or legal sufficiency.
+
+### Cognisynth relationship
+
+The implementation follows Cognisynth's principle that model-generated output is untrusted until independently checked. The patent-specific evaluator is intentionally separate from Cognisynth's existing UI blueprint validator because UI safety invariants are not valid patent-drafting checks. This benchmark uses explicit violation codes, fail-closed error handling, and case-level precision/recall reporting.
+
+### Tests
+
+From the repository root, run `python -m pip install -r backend/requirements.txt` and then `python -m unittest discover -s backend/tests -v`. The expected fixture result is 5/5 expected failures detected, with zero fixture false positives and false negatives. This is a test-set result, not a real-world accuracy estimate.
