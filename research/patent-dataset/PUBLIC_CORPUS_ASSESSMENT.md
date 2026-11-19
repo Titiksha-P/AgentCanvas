@@ -48,3 +48,25 @@ Annotator identity should be pseudonymous in released research data unless the a
 - PEDANTIC paper: https://arxiv.org/abs/2505.21342
 
 **Release gate:** do not report real-world model performance until the source terms, data lineage, label provenance, annotation agreement, adjudication, and held-out split have been independently checked.
+
+
+## Selected first public source: USPTO Patent Claims Research Dataset
+
+The first source selected for ingestion is USPTO dataset identifier **OCE-PT-00002**, with a CC0 1.0 Public Domain Dedication. Its parsed claim text and claim dependency information make it suitable for structural regression tests. The individual claim full-text CSV is listed at approximately 4.41 GB, so download and storage should be planned rather than silently fetching the full archive during deployment.
+
+- Dataset landing page: https://www.uspto.gov/ip-policy/economic-research/research-datasets/patent-claims-research-dataset
+- Bulk data portal: https://data.uspto.gov/bulkdata/datasets/ptappclm
+- Data.gov catalogue and licence metadata: https://catalog.data.gov/dataset/patent-and-patent-application-claims-research-dataset-for-academia-and-researche-1976-2014
+
+The repository includes `backend/import_uspto_claims.py`, a streaming CSV-to-JSONL importer. It requires the operator to inspect the CSV headers and explicitly map the patent identifier and claim-text columns; it never guesses a schema, assigns defect labels, or creates generated candidate outputs.
+
+Example workflow:
+
+```bash
+python backend/import_uspto_claims.py --input /path/to/patent_claims_fulltext.csv --show-header
+python backend/import_uspto_claims.py --input /path/to/patent_claims_fulltext.csv --id-column <patent_id_column> --text-column <claim_text_column> --claim-number-column <claim_sequence_column> --limit 10000
+```
+
+The second command is illustrative: replace the column placeholders with names verified from the actual CSV header. The importer emits `unlabelled_public_source` records with provenance. They are not scored by the defect benchmark until paired candidate outputs and qualified annotations are added.
+
+The source's documented coverage is U.S. patents granted 1976–2014 and U.S. patent applications published 2001–2014. It is a historical corpus, not a complete current patent corpus. Its claim/dependency metadata is a structural reference, not evidence of the seven AgentCanvas defect labels.
