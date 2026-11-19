@@ -24,6 +24,8 @@ class PatentApiTests(unittest.TestCase):
             with TestClient(app) as client:
                 response = client.post("/api/patent-evaluate")
                 self.assertEqual(response.status_code, 503)
+                history = client.get("/api/patent-history")
+                self.assertEqual(history.status_code, 503)
 
     def test_production_write_endpoints_require_bearer_token(self):
         with patch.dict(os.environ, {"APP_ENV": "production", "AGENTCANVAS_API_TOKEN": "test-secret"}, clear=False):
