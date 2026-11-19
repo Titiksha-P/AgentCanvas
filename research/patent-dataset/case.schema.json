@@ -13,6 +13,7 @@
     "required_phrases": {"type": "array", "items": {"type": "string"}},
     "unsupported_features": {"type": "array", "items": {"type": "string"}},
     "evidence_ids": {"type": "array", "items": {"type": "string"}},
+    "evidence_quotes": {"type": "array", "items": {"type": "string"}},
     "invalid_dependency_references": {"type": "array", "items": {"type": "integer", "minimum": 1}},
     "missing_antecedents": {"type": "array", "items": {"type": "string"}},
     "expected_issue_codes": {"type": "array", "items": {"type": "string"}},
