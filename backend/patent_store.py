@@ -24,7 +24,10 @@ class EvaluationRecord(Base):
     result_json: Mapped[str] = mapped_column(Text)
 
 def init_db() -> None:
-    Base.metadata.create_all(bind=engine)
+    # Production schemas are managed by committed SQL migrations. Avoid
+    # implicit DDL at request time; local/test SQLite keeps create_all.
+    if os.getenv("APP_ENV", "").lower() != "production":
+        Base.metadata.create_all(bind=engine)
 
 def save_evaluation(evaluation_type: str, summary: dict, result: dict) -> int:
     init_db()
