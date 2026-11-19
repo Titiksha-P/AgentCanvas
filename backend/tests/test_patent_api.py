@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker
 BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 import patent_store
+import patent_api
 from app import app
 
 
@@ -29,8 +30,12 @@ class PatentApiTests(unittest.TestCase):
             with TestClient(app) as client:
                 denied = client.post("/api/patent-evaluate")
                 self.assertEqual(denied.status_code, 401)
-                allowed = client.post("/api/patent-evaluate", headers={"Authorization": "Bearer test-secret"})
+                with patch.object(patent_api, "run_benchmark", return_value={
+                    "case_count": 0, "precision": 1.0, "recall": 1.0, "f1": 1.0, "results": []
+                }), patch.object(patent_api, "save_evaluation", return_value=123):
+                    allowed = client.post("/api/patent-evaluate", headers={"Authorization": "Bearer test-secret"})
                 self.assertEqual(allowed.status_code, 200)
+                self.assertEqual(allowed.json()["history_id"], 123)
 
     def test_benchmark_batch_experiment_and_history_endpoints(self):
         with tempfile.TemporaryDirectory() as tmp:
