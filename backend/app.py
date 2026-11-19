@@ -9,9 +9,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
-from patent_eval import run_benchmark
+try:
+    from .patent_api import router as patent_router
+except ImportError:  # uvicorn app:app from backend/
+    from patent_api import router as patent_router
 
-app = FastAPI(title="AgentCanvas AI Gateway", version="2.0.0")
+
+app = FastAPI(title="AgentCanvas AI Gateway", version="2.1.0")
+app.include_router(patent_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
