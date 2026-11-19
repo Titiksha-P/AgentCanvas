@@ -24,12 +24,12 @@ The API project currently has:
 Before enabling persisted evaluation history or write endpoints, configure these as encrypted/server-side environment variables in the Vercel backend project:
 
 - `DATABASE_URL`: copy the **Transaction Pooler** URI from Supabase Project Settings → Database → Connection string. Do not paste the database password into source control or the browser. Include SSL as directed by the Supabase connection-string panel.
-- `AGENTCANVAS_API_TOKEN`: a high-entropy bearer token generated in a password manager. The backend requires `Authorization: Bearer <token>` for mutation endpoints.
+- `AGENTCANVAS_API_TOKEN`: a high-entropy bearer token generated in a password manager. The backend requires `Authorization: Bearer <token>` for mutation endpoints and private evaluation-history reads.
 - `OPENAI_API_KEY`: optional, only if the LLM judge or existing agent-evaluation endpoint is to be enabled. Store it only in the backend environment.
 
 After adding or changing environment variables, redeploy the backend. Then check `/api/patent-db-health`; it should report `{"status":"ok","table":"public.patent_evaluations"}`.
 
-The public demo does not need a database connection to run the deterministic fixture preview. History persistence is unavailable until `DATABASE_URL` is configured.
+The public demo does not need a database connection to run the deterministic fixture preview. Evaluation history is private and requires the bearer token; persistence is unavailable until `DATABASE_URL` is configured.
 
 ## Supabase database
 
