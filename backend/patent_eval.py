@@ -80,8 +80,8 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
         if _normalise(quote) not in candidate:
             findings.append({"code": "EVIDENCE_QUOTE_NOT_REPRODUCED", "message": f"Configured evidence quote is absent from the candidate: {quote}"})
 
-    source_negation = bool(re.search(r"\\b(no|not|without|excluding)\\b", source))
-    candidate_negation = bool(re.search(r"\\b(no|not|without|excluding)\\b", candidate))
+    source_negation = bool(re.search("(^|[^a-z])(no|not|without|excluding)([^a-z]|$)", source))
+    candidate_negation = bool(re.search("(^|[^a-z])(no|not|without|excluding)([^a-z]|$)", candidate))
     if source_negation != candidate_negation:
         findings.append({"code": "POSSIBLE_POLARITY_CHANGE", "message": "Negation markers differ between source and candidate."})
 
