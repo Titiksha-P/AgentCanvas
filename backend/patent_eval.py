@@ -101,8 +101,10 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
 
     for term in case.get("missing_antecedents", []):
         # A use of "the X" without an earlier "a/an X" is a drafting signal.
-        if re.search(rf"\bthe\s+{re.escape(term)}\b", candidate, re.I) and not re.search(
-            rf"\b(?:a|an)\s+{re.escape(term)}\b", candidate, re.I
+        definite_use = re.search(rf"\bthe\s+{re.escape(term)}\b", candidate, re.I)
+        indefinite_introduction = re.search(rf"\b(?:a|an)\s+{re.escape(term)}\b", candidate, re.I)
+        if definite_use and (
+            indefinite_introduction is None or definite_use.start() < indefinite_introduction.start()
         ):
             findings.append({
                 "code": "ANTECEDENT_BASIS_MISSING",
