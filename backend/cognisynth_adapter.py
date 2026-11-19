@@ -14,7 +14,7 @@ class GateFinding(BaseModel):
     message: str = Field(min_length=1)
 
 class GateResult(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
     id: str = Field(min_length=1)
     findings: list[GateFinding]
     detected_issue_codes: list[str]
