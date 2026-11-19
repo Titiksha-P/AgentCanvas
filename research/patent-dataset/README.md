@@ -10,7 +10,7 @@ not legal determinations and not annotations by patent attorneys.
 - Unsupported technical additions
 - Citation identifier membership mismatch
 - Invalid claim dependency reference
-- Missing antecedent basis, evidence-quote traceability, polarity changes and clean negative controls
+- Missing antecedent basis, evidence quote omission, polarity change, and clean negative controls, evidence-quote traceability, polarity changes and clean negative controls
 
 ## Dataset protocol
 The current set is a smoke-test and regression corpus. It is not a representative
