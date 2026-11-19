@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from pathlib import Path
 from typing import Any, Literal
 
@@ -127,6 +128,7 @@ def evaluate_case(case: dict[str, Any]) -> dict[str, Any]:
 
 
 def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    started = time.perf_counter()
     if cases is None:
         cases = json.loads(DATA_PATH.read_text(encoding="utf-8"))
     validated_cases = [PatentEvaluationCase.model_validate(case).model_dump() for case in cases]
@@ -137,9 +139,10 @@ def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     fn = sum(item["false_negatives"] for item in results)
     precision = round(tp / (tp + fp), 4) if tp + fp else 1.0
     recall = round(tp / expected_total, 4) if expected_total else 1.0
+    f1 = round(2 * precision * recall / (precision + recall), 4) if precision + recall else 0.0
     return {
         "benchmark_name": "AgentCanvas Patent Output Failure-Mode Benchmark",
-        "benchmark_version": "0.1.0",
+        "benchmark_version": "0.2.0",
         "evaluation_mode": "deterministic_rules_over_synthetic_fixtures",
         "case_count": len(results),
         "cases_with_all_expected_failures_detected": sum(
@@ -151,6 +154,9 @@ def run_benchmark(cases: list[dict[str, Any]] | None = None) -> dict[str, Any]:
         "false_negatives": fn,
         "precision": precision,
         "recall": recall,
+        "f1": f1,
+        "false_positive_rate_proxy": round(fp / (tp + fp), 4) if tp + fp else 0.0,
+        "duration_ms": round((time.perf_counter() - started) * 1000),
         "detection_rate_percent": round(recall * 100, 1),
         "results": results,
         "limitations": [
