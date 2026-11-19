@@ -1,7 +1,7 @@
 # AgentCanvas Patent Output Evaluation — Technical Report
 
 **Status:** research prototype, version 0.2.0  
-**Dataset:** 15 synthetic fixtures  
+**Dataset:** 20 synthetic fixtures  
 **Scope:** observable text-level failure signals only
 
 ## Objective
@@ -29,7 +29,7 @@ claim rules. A separate domain adapter is the appropriate boundary.
 ## Metrics
 Micro precision, recall, F1, false-positive/false-negative counts, a false-positive
 proxy, duration, and per-case findings are recorded. Metrics are computed against
-synthetic expected issue codes. The proxy is not a conventional population FPR because
+synthetic expected issue codes. The proxy is not a conventional population false-positive rate because
 the fixture set does not enumerate all true-negative opportunities.
 
 ## Limitations
